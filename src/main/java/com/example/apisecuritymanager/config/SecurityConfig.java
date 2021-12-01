@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] AUTH_LIST = {
             // -- swagger ui
             "**/swagger-resources/**",
-            "/swagger-ui/",
+            "/swagger-ui/**",
             "/v2/api-docs",
             "/webjars/**"
     };
