@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -24,13 +26,14 @@ import javax.validation.ConstraintViolationException;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
 
 
     // Handles javax.validation.ConstraintViolationException. Thrown when @Validated fails.
@@ -40,6 +43,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage("Validation error");
         apiError.addValidationErrors(ex.getConstraintViolations());
+        log.error(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    //Handles AccessDeniedException. Triggered when access for User is denied.
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<Object> handleAccessDeniedException(
+            AccessDeniedException ex) {
+        ApiError apiError = new ApiError(FORBIDDEN);
+        apiError.setMessage("Access is denied");
+        apiError.setDebugMessage(ex.getMessage());
+        log.error(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    //Handles AccessDeniedException. Triggered when the credentials are invalid,
+    // the account is neither locked nor disabled (when it' thrown).
+    @ExceptionHandler(BadCredentialsException.class)
+    protected ResponseEntity<Object> handleBadCredentialsException(
+            BadCredentialsException ex) {
+        ApiError apiError = new ApiError(UNAUTHORIZED);
+        apiError.setMessage("Invalid password or email");
+        apiError.setDebugMessage(ex.getMessage());
         log.error(ex.getMessage());
         return buildResponseEntity(apiError);
     }

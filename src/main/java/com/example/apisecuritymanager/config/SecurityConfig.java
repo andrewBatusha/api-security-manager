@@ -37,12 +37,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/auth/sign-up", "/api/auth/sign-in", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs"
+    };
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs")
+                .authorizeRequests().antMatchers(AUTH_WHITELIST)
                 .permitAll()
                 .anyRequest().authenticated();
 

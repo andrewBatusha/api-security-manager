@@ -1,5 +1,6 @@
 package com.example.apisecuritymanager.controller;
 
+import com.example.apisecuritymanager.dto.JwtResponse;
 import com.example.apisecuritymanager.dto.LoginRequest;
 import com.example.apisecuritymanager.dto.LoginResponse;
 import com.example.apisecuritymanager.dto.SignUpRequest;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +34,12 @@ public class AuthController {
     @ApiOperation(value = "Get credentials for registration")
     public ResponseEntity<String> createUser(@Valid @RequestBody SignUpRequest request) {
         return ResponseEntity.ok(service.signUpUser(request));
+    }
+
+    @ApiOperation(value = "Security pass")
+    @PostMapping("/pass")
+    public ResponseEntity<JwtResponse> securityPass(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(new JwtResponse());
     }
 
 }
