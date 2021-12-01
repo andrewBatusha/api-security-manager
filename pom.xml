@@ -13,6 +13,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>api-security-manager</name>
     <description>api-security-manager</description>
+    <packaging>war</packaging>
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
