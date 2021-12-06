@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,7 +20,7 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private ObjectId id;
 
     private String email;
 
@@ -31,6 +33,7 @@ public class UserDetailsImpl implements UserDetails {
         return UserDetailsImpl.builder()
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .id(user.getId())
                 .build();
     }
 

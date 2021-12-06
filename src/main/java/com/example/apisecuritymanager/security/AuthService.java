@@ -33,6 +33,7 @@ public class AuthService {
         return LoginResponse.builder()
                 .jwt(jwt)
                 .email(details.getEmail())
+                .userId(details.getId().toHexString())
                 .build();
     }
 
