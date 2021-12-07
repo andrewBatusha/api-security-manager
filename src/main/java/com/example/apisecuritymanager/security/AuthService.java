@@ -39,7 +39,7 @@ public class AuthService {
 
     public String signUpUser(SignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Username " + request.getEmail() + " already exist");
+            throw new IllegalArgumentException("user with " + request.getEmail() + " already exist");
         }
         User user = User.builder()
                 .email(request.getEmail())

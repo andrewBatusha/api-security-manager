@@ -150,6 +150,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler({IllegalArgumentException.class})
+    protected ResponseEntity<Object> handleIncorrectFieldExceptions(
+            RuntimeException ex) {
+        ApiError apiError = new ApiError(BAD_REQUEST);
+        apiError.setMessage(ex.getMessage());
+        apiError.setDebugMessage(ex.getMessage());
+        log.error(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
     // Handle Exception in case, other handlers dod not handle it
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleOtherExceptions(Exception ex) {
